@@ -1,0 +1,11 @@
+.serve {
+    color: #eee;
+    position: absolute;
+    top: 0;
+}
+
+.serve-number {
+    color: #fff;
+    font-weight: 600;
+    font-size: 17px;
+}

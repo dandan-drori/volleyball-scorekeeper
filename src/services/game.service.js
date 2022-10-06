@@ -35,3 +35,12 @@ export function getWonSetsByEachTeam(sets) {
         return acc;
     }, {homeTeam: 0, awayTeam: 0});
 }
+
+export function getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner) {
+    return sets.map((set, idx) => {
+        if (idx === currentSetIdx) {
+            return {[team]: newTeam, [otherTeam]: newOtherTeam, winner};
+        }
+        return set;
+    })
+}

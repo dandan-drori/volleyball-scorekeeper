@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Board.css";
 import TeamScore from "../../components/teamScore/TeamScore";
 import ActionsMenu from "../../components/actionsMenu/ActionsMenu";
-import { getSetWinner, getWonSetsByEachTeam, rotatePlayers } from "../../services/game.service";
+import { getSetWinner, getUpdatedSets, getWonSetsByEachTeam, rotatePlayers } from "../../services/game.service";
 import SetsIndicators from "../../components/setsIndicators/SetsIndicators";
 import Separator from "../../components/separator/Separator";
 import Serve from "../../components/serve/Serve";
@@ -13,24 +13,14 @@ function Board() {
     const [sets, setSets] = useState([INITIAL_SET]);
 
     const scoreClicked = (team, score) => {
-        console.log(sets);
         const currentSet = sets[currentSetIdx];
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
         const newTeam = {...currentSet[team], score, isServing: true};
         const newOtherTeam = {...currentSet[otherTeam], isServing: false};
         const winner = getSetWinner(newTeam, currentSet[otherTeam], currentSetIdx === 4);
         if (winner) {
-            if (currentSet.winner) {
-                return;
-            }
-            setSets(sets.map((set, idx) => {
-                if (idx === currentSetIdx) {
-                    // fixme - not updating to 25 points after a set ends
-                    // fixme - winner is not being set
-                    return {[team]: newTeam, [otherTeam]: newOtherTeam, winner: winner};
-                }
-                return set;
-            }));
+            if (currentSet.winner) return;
+            setSets(getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner));
             if (currentSetIdx === 4) {
                 console.log(`The winner is: ${winner}!`);
                 return
@@ -41,12 +31,7 @@ function Board() {
         if (!currentSet[team].isServing) {
             rotatePlayers(currentSet[team].currentRotation);
         }
-        setSets(sets.map((set, idx) => {
-            if (idx === currentSetIdx) {
-                return {...currentSet, [team]: newTeam, [otherTeam]: newOtherTeam};
-            }
-            return set;
-        }));
+        setSets(getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner));
     }
 
     const moveToNextSet = () => {

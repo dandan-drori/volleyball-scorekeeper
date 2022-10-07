@@ -16,6 +16,11 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
         default: '',
     }
 
+    const onActionClick = (actionCallback) => {
+        actionCallback(team);
+        setIsOpen(false);
+    }
+
     return (
         <div className="actions-menu-container noSelect" style={{[stickToSide]: '15px'}}>
             <div className={isOpen ? 'actions-menu open' : 'actions-menu'}
@@ -23,13 +28,13 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
                      [!isHomeTeam ? 'right' : '']: '0',
                      flexDirection: isHomeTeam ? 'row-reverse' : 'row'
                  }}>
-                <button className="menu-button" onClick={() => foulClicked(team)}>
+                <button className="menu-button" onClick={() => onActionClick(foulClicked)}>
                     <img src={Cards} alt="עבירה"/>
                 </button>
-                <button className="menu-button" onClick={() => substitutionClicked(team)}>
+                <button className="menu-button" onClick={() => onActionClick(substitutionClicked)}>
                     <img src={UpDown} alt="חילוף"/>
                 </button>
-                <button className="menu-button" onClick={() => timeoutClicked(team)}>
+                <button className="menu-button" onClick={() => onActionClick(timeoutClicked)}>
                     <img src={TimeLeft} alt="פסק זמן"/>
                 </button>
             </div>

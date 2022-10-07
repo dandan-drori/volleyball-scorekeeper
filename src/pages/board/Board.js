@@ -2,17 +2,35 @@ import { useState } from "react";
 import "./Board.css";
 import TeamScore from "../../components/teamScore/TeamScore";
 import ActionsMenu from "../../components/actionsMenu/ActionsMenu";
-import { getSetWinner, getUpdatedSets, getWonSetsByEachTeam, rotatePlayers } from "../../services/game.service";
 import SetsIndicators from "../../components/setsIndicators/SetsIndicators";
 import Separator from "../../components/separator/Separator";
 import Serve from "../../components/serve/Serve";
 import { INITIAL_SET } from "../../config/constants";
+import {
+    getGameWinner,
+    getSetWinner,
+    getUpdatedSets,
+    getWonSetsByEachTeam,
+    rotatePlayers
+} from "../../services/game.service";
+import SubstitutionDialog from "../../components/substitutionDialog/SubstitutionDialog";
 
 function Board() {
     const [currentSetIdx, setCurrentSetIdx] = useState(0);
     const [sets, setSets] = useState([INITIAL_SET]);
+    const [dialogs, setDialogs] = useState({
+        substitution: {
+            isOpen: false,
+            team: '',
+        },
+        foul: {
+            isOpen: false,
+            team: '',
+        },
+    });
 
     const scoreClicked = (team, score) => {
+        if (getGameWinner(sets)) return;
         const currentSet = sets[currentSetIdx];
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
         const newTeam = {...currentSet[team], score, isServing: true};
@@ -20,12 +38,9 @@ function Board() {
         const winner = getSetWinner(newTeam, currentSet[otherTeam], currentSetIdx === 4);
         if (winner) {
             if (currentSet.winner) return;
-            setSets(getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner));
-            if (currentSetIdx === 4) {
-                console.log(`The winner is: ${winner}!`);
-                return
-            }
-            moveToNextSet();
+            const newSets = getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner)
+            setSets(newSets);
+            moveToNextSet(newSets, winner);
             return;
         }
         if (!currentSet[team].isServing) {
@@ -34,9 +49,13 @@ function Board() {
         setSets(getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner));
     }
 
-    const moveToNextSet = () => {
+    const moveToNextSet = (newSets, winner) => {
+        if (currentSetIdx === 4) {
+            console.log(`The winner is: ${winner}!`);
+            return;
+        }
         setCurrentSetIdx(currentSetIdx + 1);
-        setSets([...sets, INITIAL_SET]);
+        setSets([...newSets, INITIAL_SET]);
     }
 
     const timeoutClicked = (team) => {
@@ -48,6 +67,7 @@ function Board() {
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
         console.log(`Substitution for team ${team}. Current score is: ${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`);
         // todo - need to get numbers of leaving player and entering player
+        setDialogs({...dialogs, substitution: {isOpen: true, team}});
     }
 
     const foulClicked = (team) => {
@@ -58,6 +78,7 @@ function Board() {
 
     return (
         <div className="board">
+            <SubstitutionDialog isOpen={dialogs.substitution.isOpen} closeDialog={() => {setDialogs({...dialogs, substitution: {...dialogs.substitution, isOpen: false}})}} />
             <Serve currentSet={sets[currentSetIdx]}/>
             <SetsIndicators team="homeTeam" sets={getWonSetsByEachTeam(sets).homeTeam} homeColor={sets[currentSetIdx].homeTeam.color} awayColor={sets[currentSetIdx].awayTeam.color} />
             <SetsIndicators team="awayTeam" sets={getWonSetsByEachTeam(sets).awayTeam} homeColor={sets[currentSetIdx].homeTeam.color} awayColor={sets[currentSetIdx].awayTeam.color} />

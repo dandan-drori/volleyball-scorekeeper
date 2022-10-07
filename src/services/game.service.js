@@ -44,3 +44,10 @@ export function getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, ne
         return set;
     })
 }
+
+export function getGameWinner(sets) {
+    const {homeTeam, awayTeam} = getWonSetsByEachTeam(sets);
+    if (homeTeam === 3) return 'homeTeam';
+    if (awayTeam === 3) return 'awayTeam';
+    return '';
+}

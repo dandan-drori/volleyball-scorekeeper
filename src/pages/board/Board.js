@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Board.css";
+import "./Board.scss";
 import TeamScore from "../../components/teamScore/TeamScore";
 import ActionsMenu from "../../components/actionsMenu/ActionsMenu";
 import SetsIndicators from "../../components/setsIndicators/SetsIndicators";
@@ -14,6 +14,7 @@ import {
     rotatePlayers
 } from "../../services/game.service";
 import SubstitutionDialog from "../../components/substitutionDialog/SubstitutionDialog";
+import FoulDialog from "../../components/foulDialog/FoulDialog";
 
 function Board() {
     const [currentSetIdx, setCurrentSetIdx] = useState(0);
@@ -63,30 +64,75 @@ function Board() {
         console.log(`Timeout for team ${team}. Current score is: ${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`);
     }
 
-    const substitutionClicked = (team) => {
+    const onCloseDialog = (dialogName, data) => {
+        const { team } = dialogs[dialogName];
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
-        console.log(`Substitution for team ${team}. Current score is: ${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`);
-        // todo - need to get numbers of leaving player and entering player
-        setDialogs({...dialogs, substitution: {isOpen: true, team}});
+        const currentScore = `${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`
+        if (dialogName === 'foul') {
+            const {offenseType, player} = data;
+            console.log(offenseType, player, team, currentScore);
+        }
+        if (dialogName === 'substitution') {
+            const {entering, leaving} = data;
+            console.log(entering, leaving, team, currentScore);
+        }
+        toggleDialog(dialogName);
     }
 
-    const foulClicked = (team) => {
-        const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
-        console.log(`Foul called for team ${team}. Current score is: ${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`);
-        // todo - need to get type of foul, and number of player
+    const toggleDialog = (dialogName, team) => {
+        if (team) {
+            setDialogs({...dialogs, [dialogName]: {isOpen: !dialogs[dialogName].isOpen, team}});
+            return;
+        }
+        setDialogs({...dialogs, [dialogName]: {...dialogs[dialogName], isOpen: !dialogs[dialogName].isOpen}});
     }
 
     return (
         <div className="board">
-            <SubstitutionDialog isOpen={dialogs.substitution.isOpen} closeDialog={() => {setDialogs({...dialogs, substitution: {...dialogs.substitution, isOpen: false}})}} />
+            {
+                dialogs.substitution.isOpen && <SubstitutionDialog isOpen={dialogs.substitution.isOpen}
+                                                                   closeDialog={(data) => onCloseDialog('substitution', data)}
+                                                                   teamColor={sets[currentSetIdx][dialogs.substitution.team].color}
+                />
+            }
+            {
+                dialogs.foul.isOpen && <FoulDialog isOpen={dialogs.foul.isOpen}
+                                                   closeDialog={(data) => onCloseDialog('foul', data)}
+                                                   teamColor={sets[currentSetIdx][dialogs.foul.team].color}
+                />
+            }
             <Serve currentSet={sets[currentSetIdx]}/>
-            <SetsIndicators team="homeTeam" sets={getWonSetsByEachTeam(sets).homeTeam} homeColor={sets[currentSetIdx].homeTeam.color} awayColor={sets[currentSetIdx].awayTeam.color} />
-            <SetsIndicators team="awayTeam" sets={getWonSetsByEachTeam(sets).awayTeam} homeColor={sets[currentSetIdx].homeTeam.color} awayColor={sets[currentSetIdx].awayTeam.color} />
-            <TeamScore score={sets[currentSetIdx].homeTeam.score} team="homeTeam" color={sets[currentSetIdx].homeTeam.color} scoreClicked={scoreClicked} />
+            <SetsIndicators team="homeTeam"
+                            sets={getWonSetsByEachTeam(sets).homeTeam}
+                            homeColor={sets[currentSetIdx].homeTeam.color}
+                            awayColor={sets[currentSetIdx].awayTeam.color}
+            />
+            <SetsIndicators team="awayTeam"
+                            sets={getWonSetsByEachTeam(sets).awayTeam}
+                            homeColor={sets[currentSetIdx].homeTeam.color}
+                            awayColor={sets[currentSetIdx].awayTeam.color}
+            />
+            <TeamScore team="homeTeam"
+                       score={sets[currentSetIdx].homeTeam.score}
+                       color={sets[currentSetIdx].homeTeam.color}
+                       scoreClicked={scoreClicked}
+            />
             <Separator />
-            <TeamScore score={sets[currentSetIdx].awayTeam.score} team="awayTeam" color={sets[currentSetIdx].awayTeam.color} scoreClicked={scoreClicked} />
-            <ActionsMenu team="homeTeam" timeoutClicked={timeoutClicked} substitutionClicked={substitutionClicked} foulClicked={foulClicked} />
-            <ActionsMenu team="awayTeam" timeoutClicked={timeoutClicked} substitutionClicked={substitutionClicked} foulClicked={foulClicked} />
+            <TeamScore team="awayTeam"
+                       score={sets[currentSetIdx].awayTeam.score}
+                       color={sets[currentSetIdx].awayTeam.color}
+                       scoreClicked={scoreClicked}
+            />
+            <ActionsMenu team="homeTeam"
+                         timeoutClicked={timeoutClicked}
+                         substitutionClicked={(team) => toggleDialog('substitution', team)}
+                         foulClicked={(team) => toggleDialog('foul', team)}
+            />
+            <ActionsMenu team="awayTeam"
+                         timeoutClicked={timeoutClicked}
+                         substitutionClicked={(team) => toggleDialog('substitution', team)}
+                         foulClicked={(team) => toggleDialog('foul', team)}
+            />
         </div>
     )
 }

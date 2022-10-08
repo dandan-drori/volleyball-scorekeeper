@@ -1,11 +1,11 @@
-import './SubstitutionDialog.scss';
+import './FoulDialog.scss';
 import DialogContainer from "../dialogContainer/DialogContainer";
 import { useState } from "react";
 
-function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
+function FoulDialog({isOpen, closeDialog, teamColor}) {
     const [selections, setSelections] = useState({
-        leaving: '',
-        entering: '',
+        offenseType: '',
+        player: '',
     });
 
     const handleChange = ({target}) => {
@@ -18,24 +18,25 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
 
     return (
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
-            <div className="substitution-dialog-container">
-                <div className="substitution-dialog-header-container">
-                    <p className="substitution-dialog-header">Substitution</p>
+            <div className="foul-dialog-container">
+                <div className="foul-dialog-header-container">
+                    <p>Foul</p>
                     <button onClick={() => closeDialog({})}>X</button>
                 </div>
 
-                <span>Choose leaving player:</span>
-                <select className="select-leaving" name="leaving" onChange={handleChange}>
+                <span>Choose offense type: </span>
+                <select className="select-foul-type" name="offenseType" onChange={handleChange}>
                     <option value="">--</option>
-                    <option value="17">17</option>
-                    <option value="8">8</option>
-                    <option value="5">5</option>
+                    <option value="a">אזהרה</option>
+                    <option value="b">נזיפה</option>
+                    <option value="c">הרחקה</option>
                 </select>
 
                 <p>
-                    <span>Choose entering player:</span>
-                    <select className="select-entering" name="entering" onChange={handleChange}>
+                    <span>Choose offender player / coach: </span>
+                    <select className="select-player" name="player" onChange={handleChange}>
                         <option value="">--</option>
+                        <option value="coach">מאמן</option>
                         <option value="3">3</option>
                         <option value="9">9</option>
                         <option value="12">2</option>
@@ -50,4 +51,4 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
     )
 }
 
-export default SubstitutionDialog;
+export default FoulDialog;

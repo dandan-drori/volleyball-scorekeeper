@@ -1,4 +1,4 @@
-import './Separator.css';
+import './Separator.scss';
 
 function Separator() {
     return (

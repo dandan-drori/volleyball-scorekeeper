@@ -1,4 +1,4 @@
-import './SetsIndicators.css';
+import './SetsIndicators.scss';
 
 function SetsIndicators({team, sets, homeColor, awayColor}) {
     const maxSets = [1,2,3];

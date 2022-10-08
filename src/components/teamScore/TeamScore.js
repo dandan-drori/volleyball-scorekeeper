@@ -1,4 +1,4 @@
-import "./TeamScore.css";
+import "./TeamScore.scss";
 
 function TeamScore({score = 0, team, color, scoreClicked}) {
 

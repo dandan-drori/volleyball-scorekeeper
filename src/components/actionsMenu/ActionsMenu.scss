@@ -15,11 +15,11 @@
     padding: 5px;
     transform: translateX(0) rotate(0deg);
     transition: all 400ms ease-in-out;
-}
 
-.plus.open {
-    transform: translateX(-350px) rotate(-900deg);
-    background-color: #ccc;
+    &.open {
+        transform: translateX(-350px) rotate(-900deg);
+        background-color: #ccc;
+    }
 }
 
 .actions-menu {
@@ -33,12 +33,13 @@
     border-radius: 25px;
     padding: 7px 0;
     transition: all 400ms ease-in-out;
+
+    &.open {
+        width: 42.5vw;
+        opacity: 1;
+    }
 }
 
-.actions-menu.open {
-    width: 42.5vw;
-    opacity: 1;
-}
 
 .menu-button {
     background: none;

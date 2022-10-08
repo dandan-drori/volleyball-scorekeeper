@@ -1,4 +1,4 @@
-import "./ActionsMenu.css";
+import "./ActionsMenu.scss";
 import LeftChevron from "../../assets/images/left-chevron.png";
 import TimeLeft from "../../assets/images/time-left.png";
 import UpDown from "../../assets/images/up-down.png";
@@ -17,6 +17,7 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
     }
 
     const onActionClick = (actionCallback) => {
+        if (!isOpen) return;
         actionCallback(team);
         setIsOpen(false);
     }
@@ -38,6 +39,7 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
                     <img src={TimeLeft} alt="פסק זמן"/>
                 </button>
             </div>
+
             <img
                 className={isOpen ? 'plus open' : 'plus'}
                 style={{

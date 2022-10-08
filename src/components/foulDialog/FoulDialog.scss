@@ -1,0 +1,40 @@
+.foul-dialog-container {
+  font-size: 14px;
+
+  .foul-dialog-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+
+  span {
+    margin-right: 7px;
+  }
+
+  .action-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 5px;
+
+    button {
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 14px;
+      background-color: transparent;
+    }
+  }
+}
+
+

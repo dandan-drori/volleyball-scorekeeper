@@ -1,4 +1,4 @@
-import './Serve.css';
+import './Serve.scss';
 import { getServingPlayer } from "../../services/game.service";
 
 function Serve({currentSet}) {

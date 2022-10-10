@@ -15,7 +15,7 @@ function DialogContainer({children, isOpen, closeDialog}) {
     if (!isOpen) return;
 
     return (
-        <div className="overlay" >
+        <div className="overlay">
             <div className="dialog-container" ref={wrapperRef}>
                 {children}
             </div>

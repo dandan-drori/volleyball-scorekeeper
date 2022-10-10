@@ -5,6 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 10px 0;
 
     p {
       font-size: 18px;
@@ -20,19 +21,21 @@
   }
 
   span {
-    margin-right: 7px;
+    display: inline-block;
+    margin: 10px 7px 0 0;
   }
 
   .action-container {
     display: flex;
     justify-content: center;
-    padding-bottom: 5px;
+    padding: 25px 0 5px 0;
 
     button {
-      border-radius: 6px;
-      padding: 5px 10px;
+      border-radius: 25px;
+      padding: 5px 25px;
       font-size: 14px;
-      background-color: transparent;
+      color: #fefefe;
+      cursor: pointer;
     }
   }
 }

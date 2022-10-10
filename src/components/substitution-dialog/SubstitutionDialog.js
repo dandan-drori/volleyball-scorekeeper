@@ -1,5 +1,5 @@
 import './SubstitutionDialog.scss';
-import DialogContainer from "../dialogContainer/DialogContainer";
+import DialogContainer from "../dialog-container";
 import { useState } from "react";
 
 function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
@@ -7,6 +7,8 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
         leaving: '',
         entering: '',
     });
+    const [playersOnCourt, setPlayersOnCourt] = useState(['17', '8', '5']);
+    const [playersOnBench, setPlayersOnBench] = useState(['3', '9', '12']);
 
     const handleChange = ({target}) => {
         const { value, name } = target;
@@ -27,23 +29,19 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
                 <span>Choose leaving player:</span>
                 <select className="select-leaving" name="leaving" onChange={handleChange}>
                     <option value="">--</option>
-                    <option value="17">17</option>
-                    <option value="8">8</option>
-                    <option value="5">5</option>
+                    {playersOnCourt.map((number) => <option key={number} value={number}>{number}</option>)}
                 </select>
 
                 <p>
                     <span>Choose entering player:</span>
                     <select className="select-entering" name="entering" onChange={handleChange}>
                         <option value="">--</option>
-                        <option value="3">3</option>
-                        <option value="9">9</option>
-                        <option value="12">2</option>
+                        {playersOnBench.map((number) => <option key={number} value={number}>{number}</option>)}
                     </select>
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{borderColor: teamColor}}>Submit</button>
+                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>Submit</button>
                 </div>
             </div>
         </DialogContainer>

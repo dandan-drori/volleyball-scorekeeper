@@ -19,14 +19,15 @@ export function getServingPlayer(currentSet) {
 
 export function rotatePlayers(currentRotation) {
     const firstPosition = currentRotation['1'];
+    const updatedRotation = {};
     for (const key in currentRotation) {
         if (key === '6') {
-            currentRotation[key] = firstPosition;
+            updatedRotation[key] = firstPosition;
         } else {
-            currentRotation[key] = currentRotation[`${+key + 1}`];
+            updatedRotation[key] = currentRotation[`${+key + 1}`];
         }
     }
-    return currentRotation;
+    return updatedRotation;
 }
 
 export function getWonSetsByEachTeam(sets) {
@@ -39,7 +40,7 @@ export function getWonSetsByEachTeam(sets) {
 export function getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner) {
     return sets.map((set, idx) => {
         if (idx === currentSetIdx) {
-            return {[team]: newTeam, [otherTeam]: newOtherTeam, winner};
+            return {...sets[currentSetIdx], [team]: newTeam, [otherTeam]: newOtherTeam, winner};
         }
         return set;
     })

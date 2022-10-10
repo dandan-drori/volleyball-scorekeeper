@@ -1,0 +1,32 @@
+.next-set-dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .next-set-dialog-header {
+    margin: 5px 0 15px 0;
+  }
+
+  .next-set-dialog-score {
+    margin-bottom: 5px;
+    font-size: 24px;
+  }
+
+  .next-set-dialog-winner {
+    margin-bottom: 15px;
+  }
+
+  .next-set-dialog-action-container {
+    padding: 15px 0 5px 0;
+
+    button {
+      border-radius: 7px;
+      padding: 5px 25px;
+      font-size: 14px;
+      background-color: #282c34;
+      color: #fefefe;
+      cursor: pointer;
+    }
+  }
+}
+

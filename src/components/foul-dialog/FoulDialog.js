@@ -1,5 +1,5 @@
 import './FoulDialog.scss';
-import DialogContainer from "../dialogContainer/DialogContainer";
+import DialogContainer from "../dialog-container";
 import { useState } from "react";
 
 function FoulDialog({isOpen, closeDialog, teamColor}) {
@@ -44,7 +44,7 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{borderColor: teamColor}}>Submit</button>
+                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>Submit</button>
                 </div>
             </div>
         </DialogContainer>

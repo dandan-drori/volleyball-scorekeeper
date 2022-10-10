@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Board.scss";
-import TeamScore from "../../components/teamScore/TeamScore";
-import ActionsMenu from "../../components/actionsMenu/ActionsMenu";
-import SetsIndicators from "../../components/setsIndicators/SetsIndicators";
-import Separator from "../../components/separator/Separator";
-import Serve from "../../components/serve/Serve";
-import { INITIAL_SET } from "../../config/constants";
+import TeamScore from "../../components/team-score";
+import ActionsMenu from "../../components/actions-menu";
+import SetsIndicators from "../../components/sets-indicators";
+import Separator from "../../components/separator";
+import Serve from "../../components/serve";
+import SubstitutionDialog from "../../components/substitution-dialog";
+import FoulDialog from "../../components/foul-dialog";
+import NextSetDialog from "../../components/next-set-dialog";
+import { DIALOGS_STATE, SET } from "../../config/constants";
 import {
     getGameWinner,
     getSetWinner,
@@ -13,41 +16,52 @@ import {
     getWonSetsByEachTeam,
     rotatePlayers
 } from "../../services/game.service";
-import SubstitutionDialog from "../../components/substitutionDialog/SubstitutionDialog";
-import FoulDialog from "../../components/foulDialog/FoulDialog";
 
 function Board() {
     const [currentSetIdx, setCurrentSetIdx] = useState(0);
-    const [sets, setSets] = useState([INITIAL_SET]);
-    const [dialogs, setDialogs] = useState({
-        substitution: {
-            isOpen: false,
-            team: '',
-        },
-        foul: {
-            isOpen: false,
-            team: '',
-        },
-    });
+    const [sets, setSets] = useState([SET]);
+    const [dialogs, setDialogs] = useState(DIALOGS_STATE);
+
+    useEffect(() => {
+        const newSets = sets.map((set, idx) => {
+            if (idx === currentSetIdx) {
+                return {...sets[currentSetIdx], timestamps: {...sets[currentSetIdx].timestamps, start: Date.now()}};
+            }
+            return set;
+        });
+        setSets(newSets);
+    }, []);
 
     const scoreClicked = (team, score) => {
+        const isRightClick = score < sets[currentSetIdx][team].score;
+        if (score < 0) return;
         if (getGameWinner(sets)) return;
         const currentSet = sets[currentSetIdx];
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
-        const newTeam = {...currentSet[team], score, isServing: true};
-        const newOtherTeam = {...currentSet[otherTeam], isServing: false};
+        const newTeam = isRightClick ? {...currentSet[team], score} : {...currentSet[team], score, isServing: true};
+        const newOtherTeam = isRightClick ? {...currentSet[otherTeam]} : {...currentSet[otherTeam], isServing: false};
         const winner = getSetWinner(newTeam, currentSet[otherTeam], currentSetIdx === 4);
         if (winner) {
-            if (currentSet.winner) return;
-            const newSets = getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner)
+            if (currentSet.winner) {
+                toggleDialog('nextSet');
+                return;
+            }
+            const updatedSets = getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner);
+            const newSets = updatedSets.map((set, idx) => {
+                if (idx === currentSetIdx) {
+                    return {...set, timestamps: {...sets[currentSetIdx].timestamps, end: Date.now()}};
+                }
+                return set;
+            });
             setSets(newSets);
-            moveToNextSet(newSets, winner);
+            toggleDialog('nextSet');
             return;
         }
         if (!currentSet[team].isServing) {
-            rotatePlayers(currentSet[team].currentRotation);
+            newTeam.currentRotation = rotatePlayers(currentSet[team].currentRotation);
         }
-        setSets(getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner));
+        const newSets = getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner);
+        setSets(newSets);
     }
 
     const moveToNextSet = (newSets, winner) => {
@@ -56,7 +70,7 @@ function Board() {
             return;
         }
         setCurrentSetIdx(currentSetIdx + 1);
-        setSets([...newSets, INITIAL_SET]);
+        setSets([...newSets, SET]);
     }
 
     const timeoutClicked = (team) => {
@@ -65,16 +79,35 @@ function Board() {
     }
 
     const onCloseDialog = (dialogName, data) => {
-        const { team } = dialogs[dialogName];
-        const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
-        const currentScore = `${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`
-        if (dialogName === 'foul') {
-            const {offenseType, player} = data;
-            console.log(offenseType, player, team, currentScore);
-        }
-        if (dialogName === 'substitution') {
-            const {entering, leaving} = data;
-            console.log(entering, leaving, team, currentScore);
+        let { team } = dialogs[dialogName];
+        team = team || 'homeTeam';
+        const otherTeam = team === 'awayTeam' ? 'homeTeam' : 'awayTeam';
+        const currentScore = `${sets[currentSetIdx][team].score + ':' + sets[currentSetIdx][otherTeam].score}`;
+        switch (dialogName) {
+            case 'foul':
+                const {offenseType, player} = data;
+                if (!offenseType || !player) {
+                    toggleDialog(dialogName);
+                    return;
+                }
+                console.log(offenseType, player, team, currentScore);
+                break;
+            case 'substitution':
+                const {entering, leaving} = data;
+                if (!entering || !leaving) {
+                    toggleDialog(dialogName);
+                    return;
+                }
+                console.log(entering, leaving, team, currentScore);
+                break;
+            case 'nextSet':
+                const { next } = data;
+                if (next) {
+                    moveToNextSet(sets, sets[currentSetIdx.winner]);
+                }
+                break;
+            default:
+                break;
         }
         toggleDialog(dialogName);
     }
@@ -99,6 +132,12 @@ function Board() {
                 dialogs.foul.isOpen && <FoulDialog isOpen={dialogs.foul.isOpen}
                                                    closeDialog={(data) => onCloseDialog('foul', data)}
                                                    teamColor={sets[currentSetIdx][dialogs.foul.team].color}
+                />
+            }
+            {
+                dialogs.nextSet.isOpen && <NextSetDialog isOpen={dialogs.nextSet.isOpen}
+                                                         closeDialog={(data) => onCloseDialog('nextSet', data)}
+                                                         currentSet={sets[currentSetIdx]}
                 />
             }
             <Serve currentSet={sets[currentSetIdx]}/>

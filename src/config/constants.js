@@ -1,4 +1,4 @@
-export const INITIAL_SET = {
+export const SET = {
     homeTeam: {
         name: 'homeTeam',
         score: 0,
@@ -20,4 +20,19 @@ export const INITIAL_SET = {
         fouls: [],
     },
     winner: '',
+    timestamps: {start: null, end: null},
+}
+
+export const DIALOGS_STATE = {
+    substitution: {
+        isOpen: false,
+        team: '',
+    },
+    foul: {
+        isOpen: false,
+        team: '',
+    },
+    nextSet: {
+        isOpen: false,
+    }
 }

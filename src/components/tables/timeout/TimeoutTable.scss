@@ -1,0 +1,29 @@
+.timeout-table-container {
+  width: fit-content;
+
+  h3 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  table {
+    border: 1px solid black;
+    border-collapse: collapse;
+
+    tr {
+      border: 1px solid black;
+
+      th {
+        padding: 5px 15px;
+        border: 1px solid black;
+      }
+
+      td {
+        border: 1px solid black;
+        padding: 5px 20px;
+        text-align: center;
+      }
+    }
+  }
+}
+

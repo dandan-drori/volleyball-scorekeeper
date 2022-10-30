@@ -37,18 +37,17 @@ export function getWonSetsByEachTeam(sets) {
     }, {homeTeam: 0, awayTeam: 0});
 }
 
-export function getUpdatedSets(sets, currentSetIdx, team, newTeam, otherTeam, newOtherTeam, winner) {
-    return sets.map((set, idx) => {
-        if (idx === currentSetIdx) {
-            return {...sets[currentSetIdx], [team]: newTeam, [otherTeam]: newOtherTeam, winner};
-        }
-        return set;
-    })
-}
-
 export function getGameWinner(sets) {
     const {homeTeam, awayTeam} = getWonSetsByEachTeam(sets);
     if (homeTeam === 3) return 'homeTeam';
     if (awayTeam === 3) return 'awayTeam';
     return '';
+}
+
+export function getCurrentTime() {
+    return `${padToTwoDigits(new Date().getHours())}:${padToTwoDigits(new Date().getMinutes())}`;
+}
+
+export function padToTwoDigits(num) {
+    return (num + '').padStart(2, '0');
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import './DialogContainer.scss';
-import useOutsideClickDetector from "../../hooks/useOutsideClickDetector";
+import useOutsideClickDetector from "../../../hooks/useOutsideClickDetector";
 
 function DialogContainer({children, isOpen, closeDialog}) {
     const wrapperRef = useRef(null);

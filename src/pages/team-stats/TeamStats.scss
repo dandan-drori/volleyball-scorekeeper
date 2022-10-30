@@ -1,0 +1,19 @@
+.team-stats-container {
+  padding: 30px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .team-stats-tables-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    & > * {
+      margin: 0px 30px 20px 30px;
+    }
+  }
+}

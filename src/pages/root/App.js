@@ -1,17 +1,19 @@
 import './App.scss';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from '../home/Home';
-import Board from "../board/Board";
-import Register from "../register/Register";
+import Home from '../home';
+import Board from "../board";
+import Register from "../register";
+import TeamStats from "../team-stats";
 
 function App() {
   return (
     <div className="App">
       <Router>
           <Switch>
-              <Route component={Home} exact path="/" />
-              <Route component={Board} exact path="/board" />
-              <Route component={Register} exact path="/register" />
+              <Route component={Board} path="/board" />
+              <Route component={Register} path="/register" />
+              <Route component={TeamStats} path="/stats/:team" />
+              <Route component={Home} path="/" />
           </Switch>
       </Router>
     </div>

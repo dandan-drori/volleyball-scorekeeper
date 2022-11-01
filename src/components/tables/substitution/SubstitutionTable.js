@@ -20,7 +20,7 @@ function SubstitutionTable({substitutions, editEntry}) {
                 </thead>
                 <tbody>
                 {substitutions.map(({time, entering, leaving, score}) =>
-                    <tr key={time} onClick={() => editEntry({time, entering, leaving, score})}>
+                    <tr key={time} onClick={() => editEntry({time, entering, leaving, score, eventType: 'substitution'})}>
                         <td>{time}</td>
                         <td>{entering}</td>
                         <td>{leaving}</td>

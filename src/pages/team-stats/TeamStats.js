@@ -19,15 +19,18 @@ function TeamStats() {
         setEditDialog({isOpen: true, data: {...entry, team}});
     }
 
-    const closeDialog = () => {
-        console.log('closing dialog');
+    const closeDialog = (newEvent) => {
         setEditDialog({...editDialog, isOpen: false});
-        // dispatch(editEvent(team, 'substitution', {...entry, time: '12:24', team}));
+        if (!newEvent || !Object.keys(newEvent).length) {
+            return;
+        }
+        const eventName = newEvent.type ? 'foul' : 'substitution';
+        dispatch(editEvent(team, eventName, newEvent));
     }
 
     return (
         <div className="team-stats-container">
-            <EditDialog isOpen={editDialog.isOpen} closeDialog={closeDialog} data={editDialog.data}/>
+            {editDialog.isOpen && <EditDialog isOpen={editDialog.isOpen} closeDialog={closeDialog} data={editDialog.data}/>}
             <h2>{team}</h2>
             <div className="team-stats-tables-container">
                 <FoulTable fouls={fouls} editEntry={editEntry} />

@@ -1,6 +1,7 @@
 import './FoulDialog.scss';
 import DialogContainer from "../dialog-container";
 import { useState } from "react";
+import { FOUL_TYPES } from "../../../config/constants";
 
 function FoulDialog({isOpen, closeDialog, teamColor}) {
     const [selections, setSelections] = useState({
@@ -27,9 +28,9 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
                 <span>Choose offense type: </span>
                 <select className="select-foul-type" name="offenseType" onChange={handleChange}>
                     <option value="">--</option>
-                    <option value="a">אזהרה</option>
-                    <option value="b">נזיפה</option>
-                    <option value="c">הרחקה</option>
+                    <option value="a">{FOUL_TYPES.a}</option>
+                    <option value="b">{FOUL_TYPES.b}</option>
+                    <option value="c">{FOUL_TYPES.c}</option>
                 </select>
 
                 <p>

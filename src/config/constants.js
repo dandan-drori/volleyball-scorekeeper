@@ -36,3 +36,9 @@ export const DIALOGS_STATE = {
         isOpen: false,
     }
 }
+
+export const FOUL_TYPES = {
+    a: 'אזהרה',
+    b: 'נזיפה',
+    c: 'הרחקה',
+}

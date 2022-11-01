@@ -44,7 +44,7 @@ export const setsReducer = createReducer([SET], (builder) => {
         .addCase(EDIT_EVENT, (state, {payload}) => {
             const {team, eventName, event} = payload;
             const eventPluralName = `${eventName}s`;
-            const index = state[state.length - 1][team][eventPluralName].findIndex((event) => event.id === event.id);
+            const index = state[state.length - 1][team][eventPluralName].findIndex((e) => e.id === event.id);
             state[state.length - 1][team][eventPluralName][index] = event;
         })
         .addCase(SET_TIMESTAMP, (state, {payload}) => {

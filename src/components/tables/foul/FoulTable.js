@@ -1,6 +1,7 @@
 import './FoulTable.scss';
+import { FOUL_TYPES } from "../../../config/constants";
 
-function FoulTable({fouls}) {
+function FoulTable({fouls, editEntry}) {
 
     const headers = ['סוג עבירה', 'זמן', 'שחקן', 'תוצאה'];
 
@@ -21,8 +22,8 @@ function FoulTable({fouls}) {
                 </thead>
                 <tbody>
                 {fouls.map(({type, time, player, score}) =>
-                    <tr key={time}>
-                        <td>{type}</td>
+                    <tr key={time} onClick={() => editEntry({time, score, type, player, eventType: 'foul'})}>
+                        <td>{FOUL_TYPES[type]}</td>
                         <td>{time}</td>
                         <td>{player}</td>
                         <td>{score}</td>

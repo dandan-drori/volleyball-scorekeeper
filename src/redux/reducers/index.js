@@ -5,7 +5,7 @@ import {
     ADD_SET,
     CHANGE_SCORE, EDIT_EVENT,
     REMOVE_EVENT,
-    ROTATE_PLAYERS, SET_TIMESTAMP, SET_WINNER,
+    ROTATE_PLAYERS, SET_PLAYERS_STATUS, SET_TIMESTAMP, SET_WINNER,
     TOGGLE_SERVING
 } from "../actions/actionConstants";
 
@@ -56,3 +56,11 @@ export const setsReducer = createReducer([SET], (builder) => {
             state[state.length - 1].winner = winner;
         })
 });
+
+export const playersReducer = createReducer([], (builder) => {
+    builder
+        .addCase(SET_PLAYERS_STATUS, (state, {payload}) => {
+            const { playersStatus } = payload;
+            state = playersStatus;
+        })
+})

@@ -10,7 +10,7 @@ import EditDialog from "../../components/dialogs/edit-dialog";
 
 function TeamStats() {
     const { team } = useParams();
-    const sets = useSelector((state) => state);
+    const sets = useSelector(({sets}) => sets);
     const dispatch = useDispatch();
     const { fouls, substitutions, timeouts } = sets[sets.length - 1][team];
     const [editDialog, setEditDialog] = useState({isOpen: false, data: null});
@@ -33,9 +33,9 @@ function TeamStats() {
             {editDialog.isOpen && <EditDialog isOpen={editDialog.isOpen} closeDialog={closeDialog} data={editDialog.data}/>}
             <h2>{team}</h2>
             <div className="team-stats-tables-container">
-                <FoulTable fouls={fouls} editEntry={editEntry} />
                 <SubstitutionTable substitutions={substitutions} editEntry={editEntry} />
                 <TimeoutTable timeouts={timeouts} editEntry={editEntry} />
+                <FoulTable fouls={fouls} editEntry={editEntry} />
             </div>
         </div>
     )

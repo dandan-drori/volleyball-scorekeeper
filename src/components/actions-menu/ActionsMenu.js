@@ -10,8 +10,8 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
     const isHomeTeam = team === 'homeTeam';
     const stickToSide = isHomeTeam ? 'left' : 'right';
     const transforms = {
-        homeTeamAndOpen: 'translateX(350px) rotate(720deg)',
-        awayTeamAndOpen: 'translateX(-350px) rotate(-900deg)',
+        homeTeamAndOpen: `translateX(${window.innerWidth / 3 + 30}px) rotate(720deg)`,
+        awayTeamAndOpen: `translateX(-${window.innerWidth / 3 + 30}px) rotate(-900deg)`,
         homeTeamAndNotOpen: 'translateX(0) rotate(-180deg)',
         default: '',
     }

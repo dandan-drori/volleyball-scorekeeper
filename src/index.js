@@ -4,10 +4,13 @@ import './index.scss';
 import App from './pages/root';
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from 'react-redux';
-import {setsReducer} from './redux/reducers';
+import {setsReducer, playersReducer} from './redux/reducers';
 
 const store = configureStore({
-    reducer: setsReducer,
+    reducer: {
+        sets: setsReducer,
+        players: playersReducer,
+    }
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

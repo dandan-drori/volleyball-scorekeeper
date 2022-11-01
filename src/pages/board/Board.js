@@ -28,7 +28,7 @@ import {
 } from "../../redux/actions";
 
 function Board() {
-    const sets = useSelector(state => state);
+    const sets = useSelector(({sets}) => sets);
     const [dialogs, setDialogs] = useState(DIALOGS_STATE);
 
     const dispatch = useDispatch();

@@ -1,49 +1,33 @@
-import { useState } from "react"
-import PlayerCard from "../../components/playerCard/playerCard";
 import "./Register.scss"
+import { useState } from "react"
+import PlayerCard from "../../components/player-card/playerCard";
 import edenImg from '../../assets/images/eden.jpeg'
 import rotemImg from '../../assets/images/rotem.jpeg'
 import dandanImg from '../../assets/images/dandan.jpeg'
 
 function Register() {
+    // todo - get players list from backend
     const [players, setPlayers] = useState([
         {
             img: rotemImg,
-            name: 'Rotem Spivak',
+            name: 'רותם ספיבק',
             number: '10',
-            isSelected: true
+            isSelected: false
         },
         {
             img: edenImg,
-            name: 'Eden Eliel',
+            name: 'עדן אליאל',
             number: '9',
             isSelected: false
         },
         {
             img: dandanImg,
-            name: 'Dandan Drori',
-            number: '7',
-            isSelected: true
-        },
-        {
-            img: dandanImg,
-            name: 'Dandan Drori',
+            name: 'דנדן דרורי',
             number: '7',
             isSelected: false
         },
-        {
-            img: dandanImg,
-            name: 'Dandan Drori',
-            number: '7',
-            isSelected: false
-        },
-        {
-            img: dandanImg,
-            name: 'Dandan Drori',
-            number: '7',
-            isSelected: false
-        },
-    ])
+    ]);
+
     const toggleSelected = (player) => {
         setPlayers(players.map((currPlayer) => {
             if (player.number === currPlayer.number) {
@@ -51,12 +35,11 @@ function Register() {
             }
             return currPlayer
         }))
-        console.log('players', player.isSelected)
     }
 
     return (
-        <div>
-            <h1>Register</h1>
+        <div className="register-page-container">
+            <h2>רישום שחקנים</h2>
             <div className="register-container">
                 {players.map((player, idx) => {
                     return <PlayerCard toggleSelected={toggleSelected} key={idx} player={player} />

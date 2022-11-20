@@ -26,6 +26,8 @@ import {
     setWinner,
     toggleServing
 } from "../../redux/actions";
+import { useMutation } from "@apollo/client";
+import { GIVE_POINT_BY_TEAM_NAME } from "../../qraphql/mutations/sets";
 
 function Board() {
     const sets = useSelector(({sets}) => sets);
@@ -33,11 +35,23 @@ function Board() {
 
     const dispatch = useDispatch();
 
+    const [givePointMutation, { data2, loading2, error2 }] = useMutation(GIVE_POINT_BY_TEAM_NAME);
+
     useEffect(() => {
         dispatch(setTimestamp('start'));
     }, []);
 
-    const scoreClicked = (team, score) => {
+    const givePoint = async (gameSetId, teamId) => {
+        try {
+            const options = { variables: { gameSetId, teamId } };
+            const res = await givePointMutation(options);
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const scoreClicked = async (team, score) => {
         const isRightClick = score < sets[sets.length - 1][team].score;
         if (score < 0) return;
         if (getGameWinner(sets)) return;
@@ -46,6 +60,7 @@ function Board() {
 
         if (!isRightClick) {
             dispatch(toggleServing(team));
+            await givePoint("fa612d3e-249c-4028-9d68-0d173b2cd97a", '1');
         }
         const diff = isRightClick ? -1 : 1;
         dispatch(changeScore(team, diff));

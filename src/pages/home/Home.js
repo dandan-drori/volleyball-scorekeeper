@@ -6,7 +6,7 @@ function Home() {
         <div className="home">
             <div className="app-name" />
             <div className="actions">
-                <Link to="/board">Start Now</Link>
+                <Link to="/register">Start Now</Link>
                 <Link to="/settings">Settings</Link>
             </div>
         </div>

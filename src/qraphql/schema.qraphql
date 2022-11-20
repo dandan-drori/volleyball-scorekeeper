@@ -1,0 +1,65 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+type GameSetType {
+  id: String!
+  gameId: String!
+  homeTeam: TeamSetType!
+  guestTeam: TeamSetType!
+  initialReceiverTeamId: String!
+  serves: [ServeType!]!
+}
+
+type GameType {
+  id: String!
+  homeTeamId: String!
+  guestTeamId: String!
+  gameSetsIds: [String!]!
+}
+
+type LeagueType {
+  id: Int!
+  name: String!
+}
+
+type Mutation {
+  givePoint(gameSetId: String!, teamId: String!): GameSetType!
+  startGame(homeTeamId: String!, guestTeamId: String!, homeRotation: [Int!]!, guestRotation: [Int!]!): GameSetType!
+}
+
+type PlayerType {
+  name: String!
+  number: Int!
+  picture: String!
+}
+
+type Query {
+  games(id: String = null): [GameType!]!
+  teams(id: String = null): [TeamType!]!
+  gamesSets(id: String = null): [GameSetType!]!
+  allTeams(leagueId: String!, year: Int!): [TeamType!]!
+  allPlayers(teamId: String!, year: Int!): [PlayerType!]!
+  allLeagues(year: Int!): [LeagueType!]!
+}
+
+type ServeType {
+  teamId: String!
+  playerNumber: Int!
+  homeScore: Int
+  guestScore: Int
+}
+
+type TeamSetType {
+  rotation: [Int!]!
+  score: String
+}
+
+type TeamType {
+  id: String!
+  name: String!
+  playersIds: [String!]!
+}
+

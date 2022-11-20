@@ -1,0 +1,84 @@
+.rotation-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+  
+  .teams-names {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    margin-bottom: 5px;
+  }
+  
+  .flex-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .court {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    width: 60vw;
+
+    .left {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 3px solid black;
+    }
+
+    .right {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 3px solid black;
+    }
+  }
+
+  .players {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+
+    .left, .right {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 80px;
+      margin: 0 15px;
+    }
+  }
+
+  .action {
+    .submit {
+      padding: 3px 7px;
+      border-radius: 7px;
+      border: 1px solid #9e7070;
+      background-color: #ffb7b7;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .help {
+      margin-top: 20px;
+      border: 1px dashed #1583dc;
+      padding: 4px 12px;
+      background-color: #f5faff;
+      border-radius: 4px;
+
+      .info {
+        width: 15px;
+      }
+    }
+  }
+}

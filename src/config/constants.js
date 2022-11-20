@@ -21,6 +21,16 @@ export const SET = {
     },
     winner: '',
     timestamps: {start: null, end: null},
+    teams: [
+        {
+            name: 'homeTeam',
+            color: 'rgba(255,10,20,0.8)',
+        },
+        {
+            name: 'awayTeam',
+            color: 'rgba(20,10,255,0.8)',
+        }
+    ],
 }
 
 export const DIALOGS_STATE = {
@@ -42,3 +52,9 @@ export const FOUL_TYPES = {
     b: 'נזיפה',
     c: 'הרחקה',
 }
+
+export const DRAG_TYPES = {
+    POSITION: 'position',
+}
+
+export const MINIMUM_REQUIRED_PLAYERS = 6;

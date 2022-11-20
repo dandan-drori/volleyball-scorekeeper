@@ -4,16 +4,20 @@ import Home from '../home';
 import Board from "../board";
 import Register from "../register";
 import TeamStats from "../team-stats";
+import Rotation from "../rotation";
+import SelectLeagueAndTeams from "../select-leagues-and-teams/SelectLeagueAndTeams";
 
 function App() {
   return (
     <div className="App">
       <Router>
           <Switch>
-              <Route component={Board} path="/board" />
-              <Route component={Register} path="/register" />
-              <Route component={TeamStats} path="/stats/:team" />
-              <Route component={Home} path="/" />
+              <Route exact component={Board} path="/board" />
+              <Route exact component={Register} path="/register" />
+              <Route exact component={Rotation} path="/rotation" />
+              <Route exact component={SelectLeagueAndTeams} path="/select-teams" />
+              <Route exact component={TeamStats} path="/stats/:team" />
+              <Route exact component={Home} path="/" />
           </Switch>
       </Router>
     </div>

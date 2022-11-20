@@ -21,20 +21,19 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
             <div className="foul-dialog-container">
                 <div className="foul-dialog-header-container">
-                    <p>Foul</p>
+                    <p>עבירה</p>
                     <button onClick={() => closeDialog({})}>X</button>
                 </div>
 
-                <span>Choose offense type: </span>
                 <select className="select-foul-type" name="offenseType" onChange={handleChange}>
                     <option value="">--</option>
                     <option value="a">{FOUL_TYPES.a}</option>
                     <option value="b">{FOUL_TYPES.b}</option>
                     <option value="c">{FOUL_TYPES.c}</option>
                 </select>
+                <span>:סוג עבירה</span>
 
                 <p>
-                    <span>Choose offender player / coach: </span>
                     <select className="select-player" name="player" onChange={handleChange}>
                         <option value="">--</option>
                         <option value="coach">מאמן</option>
@@ -42,10 +41,11 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
                         <option value="9">9</option>
                         <option value="12">2</option>
                     </select>
+                    <span>:מבצע העבירה</span>
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>Submit</button>
+                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
                 </div>
             </div>
         </DialogContainer>

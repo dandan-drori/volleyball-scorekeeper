@@ -22,26 +22,26 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
             <div className="substitution-dialog-container">
                 <div className="substitution-dialog-header-container">
-                    <p className="substitution-dialog-header">Substitution</p>
+                    <p className="substitution-dialog-header">חילוף</p>
                     <button onClick={() => closeDialog({})}>X</button>
                 </div>
 
-                <span>Choose leaving player:</span>
                 <select className="select-leaving" name="leaving" onChange={handleChange}>
                     <option value="">--</option>
                     {playersOnCourt.map((number) => <option key={number} value={number}>{number}</option>)}
                 </select>
+                <span>:שחקן יוצא</span>
 
                 <p>
-                    <span>Choose entering player:</span>
                     <select className="select-entering" name="entering" onChange={handleChange}>
                         <option value="">--</option>
                         {playersOnBench.map((number) => <option key={number} value={number}>{number}</option>)}
                     </select>
+                    <span>:שחקן נכנס</span>
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>Submit</button>
+                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
                 </div>
             </div>
         </DialogContainer>

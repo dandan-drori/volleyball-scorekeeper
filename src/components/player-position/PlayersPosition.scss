@@ -1,0 +1,141 @@
+.right, .left {
+  .position {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px dashed grey;
+
+    &.wrong-team {
+      animation: wrong-team 800ms ease-in-out;
+    }
+
+    &.hovered {
+      background-color: #2eb32e;
+    }
+
+    &.dragging {
+      opacity: 0.5;
+      background-color: #ccc;
+      border: 1px dashed #080808;
+    }
+  }
+}
+
+.right {
+  .position {
+    &:nth-of-type(1) {
+      top: 15px;
+      right: 15px;
+    }
+
+    &:nth-of-type(2) {
+      top: 15px;
+      left: 45px;
+    }
+
+    &:nth-of-type(3) {
+      top: calc(50% - 15px);
+      left: 15px;
+    }
+
+    &:nth-of-type(4) {
+      top: calc(100% - 45px);
+      left: 45px;
+    }
+
+    &:nth-of-type(5) {
+      top: calc(100% - 45px);
+      right: 15px;
+    }
+
+    &:nth-of-type(6) {
+      top: calc(50% - 15px);
+      right: 45px;
+    }
+
+    &.dropped {
+      background-color: rgba(20,10,255,0.8);
+      color: #fefefe;
+      border: none;
+
+      &.dragging {
+        background-color: rgba(20,10,255,0.6);
+      }
+    }
+  }
+}
+
+.left {
+  .position {
+    &:nth-of-type(1) {
+      top: calc(100% - 45px);
+      left: 15px;
+    }
+
+    &:nth-of-type(2) {
+      top: calc(100% - 45px);
+      right: 45px;
+    }
+
+    &:nth-of-type(3) {
+      top: calc(50% - 15px);
+      right: 15px;
+    }
+
+    &:nth-of-type(4) {
+      top: 15px;
+      right: 45px;
+    }
+
+    &:nth-of-type(5) {
+      top: 15px;
+      left: 15px;
+    }
+
+    &:nth-of-type(6) {
+      top: calc(50% - 15px);
+      left: 45px;
+    }
+
+    &.dropped {
+      background-color: rgba(255,10,20,0.8);
+      color: #fefefe;
+      border: none;
+
+      &.dragging {
+        background-color: rgba(255,10,20,0.6);
+      }
+    }
+  }
+}
+
+@keyframes wrong-team {
+  0% {
+    background-color: red;
+  }
+  3% {
+    background-color: transparent;
+  }
+  33% {
+    background-color: red;
+  }
+  36% {
+    background-color: transparent;
+  }
+  66% {
+    background-color: red;
+  }
+  69% {
+    background-color: transparent;
+  }
+  97% {
+    background-color: red;
+  }
+  100% {
+    background-color: transparent;
+  }
+}

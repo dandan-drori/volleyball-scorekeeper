@@ -17,6 +17,8 @@ type GameType {
   id: String!
   homeTeamId: String!
   guestTeamId: String!
+  homeTeamPlayersIds: [String!]!
+  guestTeamPlayersIds: [String!]!
   gameSetsIds: [String!]!
 }
 
@@ -27,10 +29,11 @@ type LeagueType {
 
 type Mutation {
   givePoint(gameSetId: String!, teamId: String!): GameSetType!
-  startGame(homeTeamId: String!, guestTeamId: String!, homeRotation: [Int!]!, guestRotation: [Int!]!): GameSetType!
+  startGame(homeTeamId: String!, guestTeamId: String!): GameType!
 }
 
 type PlayerType {
+  id: String!
   name: String!
   number: Int!
   picture: String!

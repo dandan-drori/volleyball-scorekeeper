@@ -1,6 +1,6 @@
 import './TimeoutTable.scss';
 
-function TimeoutTable({timeouts}) {
+function TimeoutTable({timeouts, editEntry}) {
     const headers = ['זמן','תוצאה'];
 
     if (!timeouts || !timeouts.length) {
@@ -20,7 +20,7 @@ function TimeoutTable({timeouts}) {
                 </thead>
                 <tbody>
                 {timeouts.map(({time, score}) =>
-                    <tr key={time}>
+                    <tr key={time} onClick={() => editEntry({time, score, eventType: 'timeout'})}>
                         <td>{time}</td>
                         <td>{score}</td>
                     </tr>

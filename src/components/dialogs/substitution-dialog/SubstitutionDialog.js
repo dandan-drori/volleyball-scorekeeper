@@ -1,8 +1,10 @@
 import './SubstitutionDialog.scss';
 import DialogContainer from "../dialog-container";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import ToastMessage from "../../toast-message";
 
-function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
+function SubstitutionDialog({isOpen, closeDialog, teamColor, team}) {
     const [selections, setSelections] = useState({
         leaving: '',
         entering: '',
@@ -17,6 +19,13 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
     }
 
     // todo - Get list of available players from backend
+    
+    const onEdit = () => {
+        closeDialog(selections);
+        const message = `A substitution has been logged.`;
+        const link = `/stats/${team}`;
+        toast.success(<ToastMessage message={message} link={link} />, {theme: 'dark', progress: 100});
+    }
 
     return (
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
@@ -41,7 +50,7 @@ function SubstitutionDialog({isOpen, closeDialog, teamColor}) {
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
+                    <button onClick={onEdit} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
                 </div>
             </div>
         </DialogContainer>

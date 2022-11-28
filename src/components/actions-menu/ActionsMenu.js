@@ -4,6 +4,9 @@ import TimeLeft from "../../assets/images/time-left.png";
 import UpDown from "../../assets/images/up-down.png";
 import Cards from "../../assets/images/cards.png";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import ToastMessage from "../toast-message";
 
 function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,40 +22,46 @@ function ActionsMenu({team, timeoutClicked, substitutionClicked, foulClicked}) {
     const onActionClick = (actionCallback) => {
         if (!isOpen) return;
         actionCallback(team);
+        if (actionCallback === timeoutClicked) {
+            toast.success(<ToastMessage message={'A timeout has been logged.'} link={`/stats/${team}`} />, {theme: 'dark', progress: 100});
+        }
         setIsOpen(false);
     }
 
     return (
-        <div className="actions-menu-container noSelect" style={{[stickToSide]: '15px'}}>
-            <div className={isOpen ? 'actions-menu open' : 'actions-menu'}
-                 style={{
-                     [!isHomeTeam ? 'right' : '']: '0',
-                     flexDirection: isHomeTeam ? 'row-reverse' : 'row'
-                 }}>
-                <button className="menu-button" onClick={() => onActionClick(foulClicked)}>
-                    <img src={Cards} alt="עבירה"/>
-                </button>
-                <button className="menu-button" onClick={() => onActionClick(substitutionClicked)}>
-                    <img src={UpDown} alt="חילוף"/>
-                </button>
-                <button className="menu-button" onClick={() => onActionClick(timeoutClicked)}>
-                    <img src={TimeLeft} alt="פסק זמן"/>
-                </button>
+        <>
+            <div className="actions-menu-container noSelect" style={{[stickToSide]: '15px'}}>
+                <div className={isOpen ? 'actions-menu open' : 'actions-menu'}
+                     style={{
+                         [!isHomeTeam ? 'right' : '']: '0',
+                         flexDirection: isHomeTeam ? 'row-reverse' : 'row'
+                     }}>
+                    <button className="menu-button" onClick={() => onActionClick(foulClicked)}>
+                        <img src={Cards} alt="עבירה"/>
+                    </button>
+                    <button className="menu-button" onClick={() => onActionClick(substitutionClicked)}>
+                        <img src={UpDown} alt="חילוף"/>
+                    </button>
+                    <button className="menu-button" onClick={() => onActionClick(timeoutClicked)}>
+                        <img src={TimeLeft} alt="פסק זמן"/>
+                    </button>
+                </div>
+    
+                <img
+                    className={isOpen ? 'plus open' : 'plus'}
+                    style={{
+                        [stickToSide]: '0',
+                        transform: isHomeTeam && isOpen ? transforms.homeTeamAndOpen :
+                        !isHomeTeam && isOpen ? transforms.awayTeamAndOpen :
+                        isHomeTeam && !isOpen ? transforms.homeTeamAndNotOpen :
+                        transforms.default
+                    }}
+                    src={LeftChevron} alt="תפריט"
+                    onClick={() => setIsOpen(!isOpen)}
+                />
             </div>
-
-            <img
-                className={isOpen ? 'plus open' : 'plus'}
-                style={{
-                    [stickToSide]: '0',
-                    transform: isHomeTeam && isOpen ? transforms.homeTeamAndOpen :
-                    !isHomeTeam && isOpen ? transforms.awayTeamAndOpen :
-                    isHomeTeam && !isOpen ? transforms.homeTeamAndNotOpen :
-                    transforms.default
-                }}
-                src={LeftChevron} alt="תפריט"
-                onClick={() => setIsOpen(!isOpen)}
-            />
-        </div>
+            <ToastContainer />
+        </>
     )
 }
 

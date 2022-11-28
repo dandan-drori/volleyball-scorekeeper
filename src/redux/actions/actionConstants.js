@@ -9,4 +9,9 @@ export const SET_TIMESTAMP = 'SET_TIMESTAMP';
 export const SET_WINNER = 'SET_WINNER';
 
 export const SET_PLAYERS_STATUS = 'SET_PLAYERS_STATUS';
+export const ADD_PLAYER = 'ADD_PLAYER';
 export const SET_AVAILABLE_PLAYERS = 'SET_AVAILABLE_PLAYERS';
+
+export const SET_TEAM_NAME = 'SET_TEAM_NAME';
+
+export const SET_GAME_ID = 'SET_GAME_ID';

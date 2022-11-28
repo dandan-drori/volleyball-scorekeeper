@@ -46,10 +46,3 @@ export const GET_TEAMS_SCORE_BY_SET_ID = gql`
     }
 `;
 
-export const GET_TEAMS_NAMES = gql`
-    query GetTeams {
-        teams {
-            name
-        }
-    }
-`;

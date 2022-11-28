@@ -4,11 +4,11 @@ import './index.scss';
 import App from './pages/root';
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from 'react-redux';
-import { setsReducer, playersReducer, rotationReducer } from './redux/reducers';
+import { setsReducer, playersReducer, rotationReducer, teamReducer, gameReducer } from './redux/reducers';
 import { DndProvider } from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -21,9 +21,11 @@ const client = new ApolloClient({
 
 const store = configureStore({
     reducer: {
-        sets: setsReducer,
         players: playersReducer,
         rotation: rotationReducer,
+        game: gameReducer,
+        team: teamReducer,
+        sets: setsReducer,
     }
 });
 

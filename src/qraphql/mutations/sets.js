@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const START_GAME = gql`
-    mutation StartGame($homeTeamId: String!, $guestTeamId: String!, $homeRotation: [Int!]!, $guestRotation: [Int!]!) {
-        startGame(homeTeamId: $homeTeamId, guestTeamId: $guestTeamId, homeRotation: $homeRotation, guestRotation: $guestRotation) {
+    mutation StartGame($homeTeamId: String!, $guestTeamId: String!) {
+        startGame(homeTeamId: $homeTeamId, guestTeamId: $guestTeamId) {
             id
         }
     }

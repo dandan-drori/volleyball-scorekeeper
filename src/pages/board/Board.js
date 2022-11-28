@@ -28,6 +28,8 @@ import {
 } from "../../redux/actions";
 import { useMutation } from "@apollo/client";
 import { GIVE_POINT_BY_TEAM_NAME } from "../../qraphql/mutations/sets";
+import { toast } from "react-toastify";
+import ToastMessage from "../../components/toast-message";
 
 function Board() {
     const sets = useSelector(({sets}) => sets);
@@ -43,6 +45,7 @@ function Board() {
 
     const givePoint = async (gameSetId, teamId) => {
         try {
+            console.log(gameSetId, teamId);
             const options = { variables: { gameSetId, teamId } };
             const res = await givePointMutation(options);
             console.log(res);
@@ -143,19 +146,21 @@ function Board() {
         }
         setDialogs({...dialogs, [dialogName]: {...dialogs[dialogName], isOpen: !dialogs[dialogName].isOpen}});
     }
-
+    
     return (
         <div className="board">
             {
                 dialogs.substitution.isOpen && <SubstitutionDialog isOpen={dialogs.substitution.isOpen}
                                                                    closeDialog={(data) => onCloseDialog('substitution', data)}
                                                                    teamColor={sets[sets.length - 1][dialogs.substitution.team].color}
+                                                                   team={dialogs.substitution.team}
                 />
             }
             {
                 dialogs.foul.isOpen && <FoulDialog isOpen={dialogs.foul.isOpen}
                                                    closeDialog={(data) => onCloseDialog('foul', data)}
                                                    teamColor={sets[sets.length - 1][dialogs.foul.team].color}
+                                                   team={dialogs.foul.team}
                 />
             }
             {

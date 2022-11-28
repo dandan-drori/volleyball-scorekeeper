@@ -33,8 +33,8 @@ function SelectLeague({ setLeagueId }) {
     
     return (
         <div className="select-league">
-            <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">League</InputLabel>
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                <InputLabel id="demo-simple-select-label">ליגה</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -43,7 +43,8 @@ function SelectLeague({ setLeagueId }) {
                     onChange={handleChange}
                 >
                     {
-                        allLeaguesResponse?.allLeagues
+                        [...allLeaguesResponse?.allLeagues]
+                            .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
                             .map(({id, name}) => <MenuItem key={id} value={id}>{name}</MenuItem>)
                     }
                 </Select>

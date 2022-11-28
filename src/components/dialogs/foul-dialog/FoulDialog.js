@@ -2,8 +2,14 @@ import './FoulDialog.scss';
 import DialogContainer from "../dialog-container";
 import { useState } from "react";
 import { FOUL_TYPES } from "../../../config/constants";
+import { toast } from "react-toastify";
+import ToastMessage from "../../toast-message";
+import { useSelector } from "react-redux";
 
-function FoulDialog({isOpen, closeDialog, teamColor}) {
+function FoulDialog({isOpen, closeDialog, teamColor, team}) {
+    
+    const { rotation } = useSelector(({rotation}) => rotation);
+    console.log(rotation);
     const [selections, setSelections] = useState({
         offenseType: '',
         player: '',
@@ -16,6 +22,13 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
     }
 
     // todo - Get list of available players from backend
+
+    const onEdit = () => {
+        closeDialog(selections);
+        const message = `A foul has been logged.`;
+        const link = `/stats/${team}`;
+        toast.success(<ToastMessage message={message} link={link} />, {theme: 'dark', progress: 100});
+    }
 
     return (
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
@@ -45,7 +58,7 @@ function FoulDialog({isOpen, closeDialog, teamColor}) {
                 </p>
 
                 <div className="action-container">
-                    <button onClick={() => closeDialog(selections)} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
+                    <button onClick={onEdit} style={{backgroundColor: teamColor, borderColor: teamColor}}>עדכן</button>
                 </div>
             </div>
         </DialogContainer>

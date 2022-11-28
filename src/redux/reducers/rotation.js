@@ -1,10 +1,10 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { SET_AVAILABLE_PLAYERS } from "../actions/actionConstants";
+import { ADD_PLAYER, SET_AVAILABLE_PLAYERS } from "../actions";
 
 export const rotationReducer = createReducer({
     availablePlayers: {
-        homeTeam: [17,8,6,3,2,1,5,9],
-        awayTeam: [22,7,4,10,11,12,13],
+        homeTeam: [],
+        awayTeam: [],
     },
     rotation: {
         homeTeam: [null, null, null, null, null, null],
@@ -12,7 +12,7 @@ export const rotationReducer = createReducer({
     },
 }, (builder) => {
     builder
-        .addCase(SET_AVAILABLE_PLAYERS, (state, {payload}) => {
+        .addCase(ADD_PLAYER, (state, {payload}) => {
             const { team, number, position } = payload;
             const receivedNumberIndex = state.availablePlayers[team].findIndex(playerNumber => playerNumber === number);
             state.availablePlayers[team] = state.availablePlayers[team].filter(playerNumber => playerNumber !== number);
@@ -24,5 +24,9 @@ export const rotationReducer = createReducer({
                 ];
             }
             state.rotation[team][position - 1] = number;
+        })
+        .addCase(SET_AVAILABLE_PLAYERS, (state, {payload}) => {
+            const { team, availablePlayers } = payload;
+            state.availablePlayers[team] = availablePlayers;
         })
 });

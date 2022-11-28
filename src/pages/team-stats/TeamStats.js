@@ -11,6 +11,7 @@ import EditDialog from "../../components/dialogs/edit-dialog";
 function TeamStats() {
     const { team } = useParams();
     const sets = useSelector(({sets}) => sets);
+    const teams = useSelector(({team}) => team);
     const dispatch = useDispatch();
     const { fouls, substitutions, timeouts } = sets[sets.length - 1][team];
     const [editDialog, setEditDialog] = useState({isOpen: false, data: null});
@@ -27,11 +28,16 @@ function TeamStats() {
         const eventName = newEvent.type ? 'foul' : 'substitution';
         dispatch(editEvent(team, eventName, newEvent));
     }
+    
+    const getTeamName = () => {
+        const teamIndex = team === 'homeTeam' ? 0 : 1;
+        return teams[teamIndex];
+    }
 
     return (
         <div className="team-stats-container">
             {editDialog.isOpen && <EditDialog isOpen={editDialog.isOpen} closeDialog={closeDialog} data={editDialog.data}/>}
-            <h2>{team}</h2>
+            <h2>{getTeamName()}</h2>
             <div className="team-stats-tables-container">
                 <SubstitutionTable substitutions={substitutions} editEntry={editEntry} />
                 <TimeoutTable timeouts={timeouts} editEntry={editEntry} />

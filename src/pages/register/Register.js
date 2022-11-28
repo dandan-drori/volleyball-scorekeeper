@@ -3,12 +3,13 @@ import { useEffect, useMemo, useState } from "react"
 import PlayerCard from "../../components/player-card/playerCard";
 import { useDispatch } from "react-redux";
 import { countSelectedPlayers } from "../../services/player.service";
-import { setPlayersStatus } from "../../redux/actions";
+import { setAvailablePlayers, setPlayersStatus } from "../../redux/actions";
 import { useHistory, useLocation } from "react-router-dom";
 import { MINIMUM_REQUIRED_PLAYERS } from "../../config/constants";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_PLAYERS } from "../../qraphql/queries/player";
 import ContentLoader from "../../components/loader/content-loader";
+import { SET_TEAMS } from "../../qraphql/mutations/player";
 
 function Register() {
     const { search } = useLocation();
@@ -26,6 +27,15 @@ function Register() {
         variables: {
             teamId: teamId,
             year: +year,
+        }
+    });
+    
+    const [setTeams, {data: setTeamsResponse, loading: setTeamsLoading, error: setTeamsError}] = useMutation(SET_TEAMS, {
+        variables: {
+            homeTeamId: '',
+            guestTeamId: '',
+            homeTeamPlayersIds: [''],
+            guestTeamPlayersIds: [''],
         }
     });
     
@@ -61,8 +71,26 @@ function Register() {
             return;
         }
         dispatch(setPlayersStatus(players));
+        const temp = [];
+        const availablePlayers = players
+            .filter(({isSelected}) => isSelected)
+            .map(({name, number}) => {
+                const [firstName, lastName] = name.split(' ');
+                const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
+                if (temp.includes(initials)) {
+                    return `${firstName.charAt(0)}${firstName.charAt(1)}.${lastName.charAt(0)}${lastName.charAt(1)}`;
+                }
+                if (temp.includes(number)) {
+                    temp.push(initials);
+                    return initials;
+                }
+                temp.push(number);
+                return number;
+            });
+        const team = teamId === guestTeamId ? 'awayTeam' : 'homeTeam';
+        dispatch(setAvailablePlayers(team, availablePlayers));
+        
         if (teamId === guestTeamId) {
-            // todo - set the correct players (players state) on the game object 
             history.push('/rotation');
             return;
         }

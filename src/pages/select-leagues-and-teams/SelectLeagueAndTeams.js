@@ -24,7 +24,8 @@ function SelectLeagueAndTeams() {
     }
     
     return (
-        <div>
+        <div className="select-league-and-teams">
+            <h2>הגדרות</h2>
             <SelectLeague setLeagueId={setLeagueId} />
             <SelectTeams leagueId={leagueId} selectedTeamIds={selectedTeamIds} setSelectedTeamIds={setSelectedTeamIds} />
             {

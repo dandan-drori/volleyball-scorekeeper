@@ -10,7 +10,7 @@ import {
     SET_TIMESTAMP,
     SET_WINNER,
     TOGGLE_SERVING
-} from "../actions/actionConstants";
+} from "../actions";
 
 export const setsReducer = createReducer([SET], (builder) => {
     builder

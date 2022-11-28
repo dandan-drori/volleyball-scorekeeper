@@ -2,6 +2,12 @@
   direction: rtl;
   padding: 5px 10px;
 
+  .edit-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   div {
     margin-bottom: 15px;
 

@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { getSeasonYear } from "../../services/player.service";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { setTeamName } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
     const seasonYear = useMemo(getSeasonYear, []);
@@ -13,6 +15,8 @@ function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
     const [secondTeamId, setSecondTeamId] = useState('');
     
     const [getAllTeams, {data: allTeamsResponse, loading: allTeamsLoading, error: allTeamsError}] = useLazyQuery(GET_ALL_TEAMS);
+    
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (leagueId) {
@@ -33,6 +37,9 @@ function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
         const { value } = target;
         setTeamId(value);
         setSelectedTeamIds({...selectedTeamIds, [key]: value});
+        const team = key === 'firstTeamId' ? 'homeTeam' : 'awayTeam';
+        const { name } = allTeamsResponse?.allTeams?.find(({id}) => id === value);
+        dispatch(setTeamName(team, name));
     }
     
     if (allTeamsLoading) {
@@ -46,8 +53,8 @@ function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
 
     return (
         <div className="select-teams">
-            <FormControl fullWidth>
-                <InputLabel id="team-select-label-1">Team</InputLabel>
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                <InputLabel id="team-select-label-1">קבוצה מארחת</InputLabel>
                 <Select
                     labelId="team-select-label-1"
                     id="team-select-1"
@@ -58,12 +65,13 @@ function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
                     {
                         allTeamsResponse?.allTeams
                             .filter(item => item.id !== secondTeamId)
+                            .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
                             .map(({id, name}) => <MenuItem key={id} value={id}>{name}</MenuItem>)
                     }
                 </Select>
             </FormControl>
-            <FormControl fullWidth>
-                <InputLabel id="team-select-label-2">Team</InputLabel>
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                <InputLabel id="team-select-label-2">קבוצה אורחת</InputLabel>
                 <Select
                     labelId="team-select-label-2"
                     id="team-select-2"
@@ -74,6 +82,7 @@ function SelectTeams({ leagueId, selectedTeamIds, setSelectedTeamIds }) {
                     {
                         allTeamsResponse?.allTeams
                             .filter(item => item.id !== firstTeamId)
+                            .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
                             .map(({id, name}) => <MenuItem key={id} value={id}>{name}</MenuItem>)
                     }
                 </Select>

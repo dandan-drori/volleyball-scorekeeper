@@ -1,6 +1,5 @@
 import './EditDialog.scss';
 import DialogContainer from "../dialog-container";
-import { padToTwoDigits } from "../../../services/game.service";
 import { FOUL_TYPES } from "../../../config/constants";
 import { useState } from "react";
 
@@ -27,8 +26,6 @@ function EditDialog({isOpen, closeDialog, data}) {
         }
     });
 
-    const hoursOptions = Array.from({length:24},(v,i) => padToTwoDigits(i));
-    const minutesOptions = Array.from({length:60},(v,i) => padToTwoDigits(i));
     const scoreLeftOptions = Array.from({length:41},(v,i) => i);
     const scoreRightOptions = Array.from({length:41},(v,i) => i);
     // todo - get player options from backend
@@ -117,29 +114,9 @@ function EditDialog({isOpen, closeDialog, data}) {
     return (
         <DialogContainer isOpen={isOpen} closeDialog={closeDialog}>
             <div className="edit-dialog-container">
-                <div>
+                <div className="edit-dialog-header">
+                    <h3>עריכה</h3>
                     <span onClick={() => closeDialog({})}>X</span>
-                </div>
-
-                <div>
-                    <label>
-                        זמן:
-                        <select
-                            defaultValue={minutes}
-                            onChange={(e) => setEventField('time', 'minutes', e.target.value)}>
-                            {minutesOptions.map(value => {
-                                return <option key={value} value={value}>{value}</option>
-                            })}
-                        </select>
-                        <span> : </span>
-                        <select
-                            defaultValue={hours}
-                            onChange={(e) => setEventField('time', 'hours', e.target.value)}>
-                            {hoursOptions.map(value => {
-                                return <option key={value} value={value}>{value}</option>
-                            })}
-                        </select>
-                    </label>
                 </div>
 
                 <div>

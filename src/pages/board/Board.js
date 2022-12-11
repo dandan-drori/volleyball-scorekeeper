@@ -170,6 +170,8 @@ function Board() {
                 />
             }
             <Serve currentSet={sets[sets.length - 1]}/>
+            {/*<TeamName />*/}
+            {/*<TeamName />*/}
             <SetsIndicators team="homeTeam"
                             sets={getWonSetsByEachTeam(sets).homeTeam}
                             homeColor={sets[sets.length - 1].homeTeam.color}

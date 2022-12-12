@@ -1,4 +1,4 @@
-name: Run tests on PR and Push
+name: on-push
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
+  name: on-push
   build:
 
     runs-on: ubuntu-latest

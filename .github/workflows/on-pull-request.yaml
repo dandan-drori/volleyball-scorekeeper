@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-  name: on-push
   build:
 
     runs-on: ubuntu-latest

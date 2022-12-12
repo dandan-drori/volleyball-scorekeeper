@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-  name: Run tests on PR and Push
   build:
 
     runs-on: ubuntu-latest

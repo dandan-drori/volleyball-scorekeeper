@@ -5,7 +5,8 @@ import {
     EDIT_EVENT,
     REMOVE_EVENT,
     ROTATE_PLAYERS, SET_TIMESTAMP, SET_WINNER,
-    TOGGLE_SERVING
+    TOGGLE_SERVING,
+    SET_SCORE_SERVING_PLAYERS,
 } from "./actionConstants";
 
 export function addSet(set) {
@@ -42,4 +43,8 @@ export function setTimestamp(timestampType) {
 
 export function setWinner(winner) {
     return { type: SET_WINNER, payload: { winner } };
+}
+
+export function updateScoreServingPlayers(team, currentServingPlayer) {
+    return { type: SET_SCORE_SERVING_PLAYERS, payload: { team, currentServingPlayer } };
 }

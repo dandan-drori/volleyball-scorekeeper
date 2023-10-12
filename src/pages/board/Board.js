@@ -11,7 +11,7 @@ import NextSetDialog from "../../components/dialogs/next-set-dialog";
 import { DIALOGS_STATE, SET } from "../../config/constants";
 import {
     getCurrentTime,
-    getGameWinner,
+    getGameWinner, getMatchSummary, getServingPlayer,
     getSetWinner,
     getWonSetsByEachTeam,
     rotatePlayers
@@ -24,7 +24,7 @@ import {
     rotatePlayersAction,
     setTimestamp,
     setWinner,
-    toggleServing
+    toggleServing, updateScoreServingPlayers
 } from "../../redux/actions";
 import { useMutation } from "@apollo/client";
 import { GIVE_POINT_BY_TEAM_NAME } from "../../qraphql/mutations/sets";
@@ -34,6 +34,7 @@ import ToastMessage from "../../components/toast-message";
 function Board() {
     const sets = useSelector(({sets}) => sets);
     const [dialogs, setDialogs] = useState(DIALOGS_STATE);
+    const [currentServingPlayer, setCurrentServingPlayer] = useState(getServingPlayer(sets[sets.length - 1]));
 
     const dispatch = useDispatch();
 
@@ -41,39 +42,47 @@ function Board() {
 
     useEffect(() => {
         dispatch(setTimestamp('start'));
-    }, []);
+    }, [sets.length]);
 
     const givePoint = async (gameSetId, teamId) => {
         try {
-            console.log(gameSetId, teamId);
             const options = { variables: { gameSetId, teamId } };
             const res = await givePointMutation(options);
             console.log(res);
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     }
 
     const scoreClicked = async (team, score) => {
+        console.log(sets);
         const isRightClick = score < sets[sets.length - 1][team].score;
         if (score < 0) return;
-        if (getGameWinner(sets)) return;
+        if (getGameWinner(sets)) {
+            console.log(sets);
+            return;
+        }
         const currentSet = sets[sets.length - 1];
+
+        // if scoring team is not serving, rotate players
+        if (!currentSet[team].isServing) {
+            const currentServingPlayer = getServingPlayer(currentSet);
+            setCurrentServingPlayer(currentServingPlayer);
+        }
+
         const otherTeam = team === 'homeTeam' ? 'awayTeam' : 'homeTeam';
 
-        if (!isRightClick) {
-            dispatch(toggleServing(team));
-            await givePoint("fa612d3e-249c-4028-9d68-0d173b2cd97a", '1');
-        }
-        const diff = isRightClick ? -1 : 1;
-        dispatch(changeScore(team, diff));
-
         const winner = getSetWinner({name: team, score}, currentSet[otherTeam], sets.length === 5);
+        const servingPlayer = getServingPlayer(currentSet);
         if (winner) {
             if (currentSet.winner) {
                 toggleDialog('nextSet');
                 return;
             }
+            // before displaying dialog, update score and winner
+            const diff = isRightClick ? -1 : 1;
+            dispatch(changeScore(team, diff));
+            dispatch(updateScoreServingPlayers(team, servingPlayer));
             dispatch(setWinner(winner));
             dispatch(setTimestamp('end'));
             toggleDialog('nextSet');
@@ -84,11 +93,22 @@ function Board() {
             dispatch(rotatePlayersAction(team, updatedRotation));
         }
         dispatch(setWinner(winner));
+
+        const diff = isRightClick ? -1 : 1;
+        dispatch(changeScore(team, diff));
+        dispatch(updateScoreServingPlayers(team, servingPlayer));
+
+        if (!isRightClick) {
+            dispatch(toggleServing(team));
+            await givePoint("fa612d3e-249c-4028-9d68-0d173b2cd97a", '1');
+        }
     }
 
     const moveToNextSet = (winner) => {
-        if (sets.length === 5) {
+        if (getGameWinner(sets)) {
             console.log(`The winner is: ${winner}!`);
+            const matchSummary = getMatchSummary(sets);
+            console.log(matchSummary);
             return;
         }
         dispatch(addSet(SET));
@@ -169,7 +189,7 @@ function Board() {
                                                          currentSet={sets[sets.length - 1]}
                 />
             }
-            <Serve currentSet={sets[sets.length - 1]}/>
+            <Serve isHomeTeamServing={sets[sets.length - 1].homeTeam.isServing} currentServingPlayer={currentServingPlayer}/>
             {/*<TeamName />*/}
             {/*<TeamName />*/}
             <SetsIndicators team="homeTeam"

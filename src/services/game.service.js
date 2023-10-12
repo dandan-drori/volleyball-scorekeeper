@@ -44,6 +44,26 @@ export function getGameWinner(sets) {
     return '';
 }
 
+export function getMatchSummary(sets) {
+    sets.forEach((set, index) => {
+        const setWinner = getSetWinner({ score: set.homeTeam.score, name: set.homeTeam.name }, { score: set.awayTeam.score, name: set.awayTeam.name }, index === 4);
+        console.log(setWinner);
+        const setScore = getSetScore(set.homeTeam.score, set.awayTeam.score);
+        console.log(setScore);
+        const setTimeouts = getSetTimeouts(set.homeTeam.timeouts, set.awayTeam.timeouts);
+        console.log(set);
+    })
+    return sets;
+}
+
+export function getSetScore(homeTeamScore, awayTeamScore) {
+    return `${homeTeamScore} : ${awayTeamScore}`;
+}
+
+export function getSetTimeouts(homeTeamTimeouts, awayTeamTimeouts) {
+    return `${homeTeamTimeouts.length} : ${awayTeamTimeouts.length}`;
+}
+
 export function getCurrentTime() {
     return `${padToTwoDigits(new Date().getHours())}:${padToTwoDigits(new Date().getMinutes())}`;
 }

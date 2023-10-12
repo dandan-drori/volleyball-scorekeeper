@@ -6,7 +6,7 @@ import {
     CHANGE_SCORE,
     EDIT_EVENT,
     REMOVE_EVENT,
-    ROTATE_PLAYERS,
+    ROTATE_PLAYERS, SET_SCORE_SERVING_PLAYERS,
     SET_TIMESTAMP,
     SET_WINNER,
     TOGGLE_SERVING
@@ -57,5 +57,9 @@ export const setsReducer = createReducer([SET], (builder) => {
         .addCase(SET_WINNER, (state, {payload}) => {
             const { winner } = payload;
             state[state.length - 1].winner = winner;
+        })
+        .addCase(SET_SCORE_SERVING_PLAYERS, (state, {payload}) => {
+            const { team, currentServingPlayer } = payload;
+            state[state.length - 1][team].scoreServingPlayers.push(currentServingPlayer);
         })
 });

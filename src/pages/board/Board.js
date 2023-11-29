@@ -110,6 +110,7 @@ function Board() {
             const { matchSummary, setsSummaries } = summary;
             console.log(matchSummary);
             console.log(setsSummaries);
+            // TODO: Create Summary table with matchSummary and setsSummaries
             return;
         }
         dispatch(addSet(SET));

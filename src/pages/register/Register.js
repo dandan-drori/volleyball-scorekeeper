@@ -40,7 +40,6 @@ function Register() {
     });
     
     useEffect(() => {
-        console.log(allPlayers);
         if (!allPlayers?.allPlayers) return;
         setPlayers(allPlayers?.allPlayers?.map(({id, picture, name, number}) => {
             return {

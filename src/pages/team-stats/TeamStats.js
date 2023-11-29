@@ -1,5 +1,5 @@
 import './TeamStats.scss';
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import FoulTable from "../../components/tables/foul";
 import TimeoutTable from "../../components/tables/timeout";
 import SubstitutionTable from "../../components/tables/substitution";
@@ -37,6 +37,7 @@ function TeamStats() {
     return (
         <div className="team-stats-container">
             {editDialog.isOpen && <EditDialog isOpen={editDialog.isOpen} closeDialog={closeDialog} data={editDialog.data}/>}
+            <Link to="/board">Back</Link>
             <h2>{getTeamName()}</h2>
             <div className="team-stats-tables-container">
                 <SubstitutionTable substitutions={substitutions} editEntry={editEntry} />

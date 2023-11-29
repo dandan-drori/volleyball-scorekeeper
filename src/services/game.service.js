@@ -1,3 +1,5 @@
+import {INITIAL_MATCH_SUMMARY} from "../config/constants";
+
 export function getSetWinner(team, otherTeam, isLastSet) {
     const WINNING_SCORE = isLastSet ? 15 : 25;
     const SCORE_DIFF_TO_WIN = 2;
@@ -45,27 +47,68 @@ export function getGameWinner(sets) {
 }
 
 export function getMatchSummary(sets) {
-    sets.forEach((set, index) => {
-        const setWinner = getSetWinner({ score: set.homeTeam.score, name: set.homeTeam.name }, { score: set.awayTeam.score, name: set.awayTeam.name }, index === 4);
-        console.log(setWinner);
-        const setScore = getSetScore(set.homeTeam.score, set.awayTeam.score);
-        console.log(setScore);
-        const setTimeouts = getSetTimeouts(set.homeTeam.timeouts, set.awayTeam.timeouts);
-        console.log(set);
-    })
-    return sets;
+    const matchSummary = INITIAL_MATCH_SUMMARY;
+    const setsSummaries = [];
+    sets.forEach((set) => {
+        matchSummary[set.winner].setsWon += 1;
+        const { homeTeam, awayTeam } = set;
+        matchSummary.homeTeam.score += homeTeam.score;
+        matchSummary.awayTeam.score += awayTeam.score;
+        matchSummary.homeTeam.timeouts += homeTeam.timeouts.length;
+        matchSummary.awayTeam.timeouts += awayTeam.timeouts.length;
+        matchSummary.homeTeam.substitutions += homeTeam.substitutions.length;
+        matchSummary.awayTeam.substitutions += awayTeam.substitutions.length;
+        matchSummary.homeTeam.fouls += homeTeam.fouls.length;
+        matchSummary.awayTeam.fouls += awayTeam.fouls.length;
+
+        const setSummary = getSetSummary(set);
+        setsSummaries.push(setSummary);
+    });
+
+    const { matchStart, matchEnd, matchDuration } = getMatchTime(sets);
+    matchSummary.matchStart = matchStart;
+    matchSummary.matchEnd = matchEnd;
+    matchSummary.matchDuration = matchDuration;
+
+    return { setsSummaries, matchSummary };
 }
 
-export function getSetScore(homeTeamScore, awayTeamScore) {
-    return `${homeTeamScore} : ${awayTeamScore}`;
+export function getSetSummary(set) {
+    const { homeTeam, awayTeam, timestamps, winner } = set;
+    return {
+        homeTeam: { timeouts: homeTeam.timeouts.length, substitutions: homeTeam.substitutions.length, fouls: homeTeam.fouls.length, score: homeTeam.score },
+        awayTeam: { timeouts: awayTeam.timeouts.length, substitutions: awayTeam.substitutions.length, fouls: awayTeam.fouls.length, score: awayTeam.score },
+        duration: getSetDuration(timestamps),
+        winner,
+    }
 }
 
-export function getSetTimeouts(homeTeamTimeouts, awayTeamTimeouts) {
-    return `${homeTeamTimeouts.length} : ${awayTeamTimeouts.length}`;
+export function getMatchTime(sets) {
+    const matchStartDate = new Date(sets[0].timestamps.start);
+    const matchEndDate = new Date(sets[sets.length - 1].timestamps.end);
+    const matchStart = getFormattedTime(matchStartDate.getHours(), matchStartDate.getMinutes());
+    const matchEnd = getFormattedTime(matchEndDate.getHours(), matchEndDate.getMinutes());
+    const matchDuration = convertToHoursAndMinutes(matchEndDate.getTime() - matchStartDate.getTime());
+    return { matchStart, matchEnd, matchDuration };
+}
+
+export function getSetDuration(timestamps) {
+    const { start, end } = timestamps;
+    return Math.floor((end - start) / 1000 / 60);
 }
 
 export function getCurrentTime() {
     return `${padToTwoDigits(new Date().getHours())}:${padToTwoDigits(new Date().getMinutes())}`;
+}
+
+export function getFormattedTime(hours, minutes) {
+    return `${padToTwoDigits(hours)}:${padToTwoDigits(minutes)}`;
+}
+
+export function convertToHoursAndMinutes(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${padToTwoDigits(hours)}:${padToTwoDigits(remainingMinutes)}`;
 }
 
 export function padToTwoDigits(num) {

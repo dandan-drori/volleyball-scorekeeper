@@ -60,3 +60,23 @@ export const DRAG_TYPES = {
 }
 
 export const MINIMUM_REQUIRED_PLAYERS = 6;
+
+export const INITIAL_MATCH_SUMMARY = {
+    homeTeam: {
+        timeouts: 0,
+            substitutions: 0,
+            fouls: 0,
+            score: 0,
+            setsWon: 0,
+    },
+    awayTeam: {
+        timeouts: 0,
+            substitutions: 0,
+            fouls: 0,
+            score: 0,
+            setsWon: 0,
+    },
+    matchStart: '',
+        matchEnd: '',
+        matchDuration: '',
+};

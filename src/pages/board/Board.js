@@ -55,7 +55,6 @@ function Board() {
     }
 
     const scoreClicked = async (team, score) => {
-        console.log(sets);
         const isRightClick = score < sets[sets.length - 1][team].score;
         if (score < 0) return;
         if (getGameWinner(sets)) {
@@ -107,8 +106,10 @@ function Board() {
     const moveToNextSet = (winner) => {
         if (getGameWinner(sets)) {
             console.log(`The winner is: ${winner}!`);
-            const matchSummary = getMatchSummary(sets);
+            const summary = getMatchSummary(sets);
+            const { matchSummary, setsSummaries } = summary;
             console.log(matchSummary);
+            console.log(setsSummaries);
             return;
         }
         dispatch(addSet(SET));

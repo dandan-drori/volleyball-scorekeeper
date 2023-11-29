@@ -15,7 +15,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 const client = new ApolloClient({
-    uri: 'https://volley-score.onrender.com/graphql',
+    uri: 'http://0.0.0.0:8000/graphql', // 'https://volley-score.onrender.com/graphql'
     cache: new InMemoryCache(),
 });
 
